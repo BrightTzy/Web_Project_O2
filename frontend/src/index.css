@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-dark: #0f172a;
+  --bg-card: rgba(30, 41, 59, 0.7);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+}
+
+.btn-danger {
+  background-color: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover {
+  background-color: var(--danger);
+  color: white;
+}
+
+/* Inputs */
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: white;
+  margin-bottom: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-field:focus {
+  border-color: var(--accent);
+}
+
+/* Layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+}
+
+/* Dashboard Specific Layout */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+/* --- Responsive Styles --- */
+
+@media (max-width: 1024px) {
+  .search-wrapper {
+    width: 240px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column !important;
+    gap: 16px;
+    margin-bottom: 24px !important;
+  }
+  
+  .app-container {
+    flex-direction: column;
+    padding-top: 72px; /* Space for top header */
+    padding-bottom: 70px; /* Space for bottom nav */
+  }
+
+  .sidebar-glass {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 72px !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    z-index: 50;
+    padding: 0 16px !important;
+    
+    /* CRITICAL FIX: backdrop-filter creates a CSS containing block. 
+       This trapped the bottom-nav inside the 72px top header!
+       Removing it lets the bottom-nav stick to the bottom of the screen. */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(15, 23, 42, 0.98) !important;
+  }
+
+  .sidebar-header {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .sidebar-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .sidebar-footer {
+    padding: 0 !important;
+    border: none !important;
+    margin: 0 !important;
+  }
+  
+  .sidebar-footer > div {
+    display: none !important;
+  }
+
+  .sidebar-footer button {
+    padding: 8px !important;
+    width: auto !important;
+    background: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-secondary) !important;
+  }
+  
+  .sidebar-footer button:hover {
+    color: var(--danger) !important;
+    border-color: var(--danger) !important;
+  }
+
+  .sidebar-footer button span {
+    display: none !important;
+  }
+
+  .sidebar-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 70px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    padding: 0 8px !important;
+    background: var(--bg-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border-color);
+    z-index: 50;
+    overflow: visible !important;
+  }
+
+  .sidebar-nav a {
+    flex: 1;
+    display: flex;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    padding: 8px 4px !important;
+    font-size: 11px !important;
+    font-weight: 500;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+  }
+
+  .sidebar-nav a.active {
+    color: var(--accent) !important;
+  }
+
+  .main-content {
+    padding: 16px !important;
+  }
+
+  .search-wrapper {
+    position: relative !important;
+    top: 0 !important;
+    right: 0 !important;
+    float: none !important;
+    width: 100% !important;
+    margin-bottom: 24px !important;
+  }
+
+  form {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  form button {
+    width: 100% !important;
+    justify-content: center;
+  }
+
+  .glass-panel {
+    overflow-x: auto;
+    padding: 16px;
+  }
+
+  table {
+    white-space: nowrap;
+  }
+  
+  th, td {
+    padding: 12px 16px !important;
+  }
+}
