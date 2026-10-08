@@ -28,7 +28,7 @@ export async function middleware(request) {
       }
 
       if (role === 'LOGISTICS_STAFF') {
-        if (!path.startsWith('/api/shipments') && !path.startsWith('/api/customers') && !path.startsWith('/api/warehouses') && !path.startsWith('/api/stats')) {
+        if (!path.startsWith('/api/shipments') && !path.startsWith('/api/customers') && !path.startsWith('/api/warehouses') && !path.startsWith('/api/stats') && !path.startsWith('/api/inventory')) {
            return NextResponse.json({ error: 'Forbidden: Logistics Staff cannot access this resource' }, { status: 403 });
         }
         if (path.startsWith('/api/warehouses') && request.method !== 'GET') {
