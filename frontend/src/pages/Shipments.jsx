@@ -15,8 +15,8 @@ const fetchWarehouses = async () => {
   const res = await fetch("/api/warehouses");
   return res.json();
 };
-const fetchProducts = async () => {
-  const res = await fetch("/api/products");
+const fetchInventory = async () => {
+  const res = await fetch("/api/inventory");
   return res.json();
 };
 
@@ -27,6 +27,7 @@ export default function Shipments() {
   const [warehouseId, setWarehouseId] = useState("");
   const [productId, setProductId] = useState("");
   const [quantity, setQuantity] = useState("1");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["shipments"],
@@ -40,21 +41,34 @@ export default function Shipments() {
     queryKey: ["warehouses"],
     queryFn: fetchWarehouses,
   });
-  const { data: prodData } = useQuery({
-    queryKey: ["products"],
-    queryFn: fetchProducts,
+  const { data: invData } = useQuery({
+    queryKey: ["inventory"],
+    queryFn: fetchInventory,
   });
 
   const createMutation = useMutation({
     mutationFn: async (newShipment) => {
+      setErrorMessage(""); // clear previous errors
       const res = await fetch("/api/shipments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newShipment),
       });
-      return res.json();
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to create shipment");
+      return data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["shipments"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["shipments"] });
+      setCustomerId("");
+      setWarehouseId("");
+      setProductId("");
+      setQuantity("1");
+      setErrorMessage("");
+    },
+    onError: (error) => {
+      setErrorMessage(error.message);
+    }
   });
 
   const statusMutation = useMutation({
@@ -78,10 +92,6 @@ export default function Shipments() {
       quantity: Number(quantity) || 1,
       status: "PENDING",
     });
-    setCustomerId("");
-    setWarehouseId("");
-    setProductId("");
-    setQuantity("1");
   };
 
   const getStatusColor = (status) => {
@@ -126,6 +136,13 @@ export default function Shipments() {
 
       <div className="glass-panel" style={{ marginBottom: "32px" }}>
         <h3 style={{ marginBottom: "16px" }}>Create New Shipment</h3>
+        
+        {errorMessage && (
+          <div style={{ padding: '12px 16px', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', border: '1px solid var(--danger)', borderRadius: '8px', marginBottom: '16px', fontSize: '14px', fontWeight: '500' }}>
+            {errorMessage}
+          </div>
+        )}
+
         <form
           onSubmit={handleCreate}
           style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}
@@ -163,11 +180,12 @@ export default function Shipments() {
             style={{ marginBottom: 0, flex: 1, minWidth: "180px" }}
             value={productId}
             onChange={(e) => setProductId(e.target.value)}
+            disabled={!warehouseId}
           >
-            <option value="">Select Product...</option>
-            {prodData?.data?.map((p) => (
-              <option key={p._id} value={p._id}>
-                {p.name} ({p.sku})
+            <option value="">{warehouseId ? "Select Product..." : "Select Warehouse First"}</option>
+            {invData?.data?.filter(inv => inv.warehouseId?._id === warehouseId).map((inv) => (
+              <option key={inv.productId?._id} value={inv.productId?._id}>
+                {inv.productId?.name} ({inv.productId?.sku}) - {inv.quantity} in stock
               </option>
             ))}
           </select>

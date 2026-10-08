@@ -21,6 +21,22 @@ export async function POST(request) {
   await dbConnect();
   try {
     const body = await request.json();
+    
+    // 1. Verify Inventory exists and has enough capacity
+    const { Inventory } = await import('@/models');
+    const inventory = await Inventory.findOne({ 
+      productId: body.productId, 
+      warehouseId: body.warehouseId 
+    });
+
+    if (!inventory) {
+      return NextResponse.json({ error: 'Product does not exist in this warehouse' }, { status: 400 });
+    }
+
+    if (inventory.quantity < body.quantity) {
+      return NextResponse.json({ error: `Not enough stock. Available: ${inventory.quantity}` }, { status: 400 });
+    }
+
     const shipment = await Shipment.create(body);
     
     // Create Audit Log automatically

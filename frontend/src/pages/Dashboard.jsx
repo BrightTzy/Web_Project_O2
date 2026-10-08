@@ -96,37 +96,52 @@ export default function Dashboard() {
   );
 
 
-  const renderWarehouseDashboard = () => (
-    <>
-      <div className="stats-container">
-        <StatCard title="Total Units in Stock" value={stats.totalStock} icon={<Layers size={32} />} color="#3b82f6" />
-        <StatCard title="Unique Products" value={stats.products} icon={<Box size={32} />} color="#8b5cf6" />
-        <StatCard title="Low Stock Alerts (<50)" value={stats.lowStockCount} icon={<AlertTriangle size={32} />} color={stats.lowStockCount > 0 ? "#ef4444" : "#22c55e"} />
-      </div>
-      <div className="glass-panel">
-        <h2 style={{ marginBottom: '16px' }}>Warehouse Operations Overview</h2>
-        <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-          Welcome to the Warehouse Control Center. You are currently managing {stats.totalStock} units of inventory across our facilities.
-          {stats.lowStockCount > 0 ? ` Please review the ${stats.lowStockCount} items that are running low on stock.` : ' All inventory levels are healthy.'}
-          Navigate to the Products or Inventory tabs on the left to add new stock or manage catalog details.
-        </p>
-      </div>
-    </>
-  );
+  const renderWarehouseDashboard = () => {
+    return (
+      <>
+        <div className="stats-container" style={{ marginBottom: '24px' }}>
+          <StatCard title="Total Units in Stock" value={stats.totalStock} icon={<Layers size={32} />} color="#3b82f6" />
+          <StatCard title="Unique Products" value={stats.products} icon={<Box size={32} />} color="#8b5cf6" />
+          <StatCard title="Low Stock Alerts (<50)" value={stats.lowStockCount} icon={<AlertTriangle size={32} />} color={stats.lowStockCount > 0 ? "#ef4444" : "#22c55e"} />
+        </div>
+        <div className="glass-panel">
+          <h2 style={{ marginBottom: '16px' }}>Stock Capacity by Warehouse</h2>
+          <div style={{ height: '300px', width: '100%' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={stats.warehouseChartData || []} margin={{ top: 20, right: 20, left: 0, bottom: 10 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+                <XAxis dataKey="name" height={60} stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 13 }} axisLine={false} tickLine={false} />
+                <YAxis width={40} stroke="#94a3b8" tick={{ fill: '#94a3b8' }} axisLine={false} tickLine={false} allowDecimals={false} tickMargin={8} />
+                <Tooltip cursor={{ fill: 'rgba(255,255,255,0.05)' }} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f8fafc' }} />
+                <Bar dataKey="stock" name="Units in Stock" fill="#8b5cf6" radius={[4, 4, 0, 0]} maxBarSize={60} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </>
+    );
+  };
 
   const renderLogisticsDashboard = () => (
     <>
-      <div className="stats-container">
+      <div className="stats-container" style={{ marginBottom: '24px' }}>
         <StatCard title="Action Required (Pending)" value={stats.pendingShipments} icon={<AlertTriangle size={32} />} color="#ef4444" />
         <StatCard title="Currently In Transit" value={stats.inTransitShipments} icon={<Truck size={32} />} color="#f59e0b" />
         <StatCard title="Successfully Delivered" value={stats.deliveredShipments} icon={<CheckCircle size={32} />} color="#22c55e" />
       </div>
       <div className="glass-panel" style={{ marginBottom: '24px' }}>
-        <h2 style={{ marginBottom: '16px' }}>Logistics & Delivery Overview</h2>
-        <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-          Welcome to the Logistics Control Center. You currently have {stats.pendingShipments} shipments awaiting processing and {stats.inTransitShipments} shipments on the road.
-          Use the Shipments tab to update delivery statuses in real-time, or the Customers tab to manage our {stats.customers} active client profiles.
-        </p>
+        <h2 style={{ marginBottom: '24px' }}>Live Shipment Distribution</h2>
+        <div style={{ height: '350px', width: '100%' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={stats.chartData} margin={{ top: 20, right: 20, left: 0, bottom: 10 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
+              <XAxis dataKey="name" height={60} stroke="#94a3b8" tick={{ fill: '#94a3b8', fontSize: 11 }} interval={0} angle={-45} textAnchor="end" axisLine={false} tickLine={false} />
+              <YAxis width={30} stroke="#94a3b8" tick={{ fill: '#94a3b8' }} axisLine={false} tickLine={false} allowDecimals={false} tickMargin={8} />
+              <Tooltip cursor={{ fill: 'rgba(255,255,255,0.05)' }} contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px', color: '#f8fafc' }} itemStyle={{ color: '#3b82f6', fontWeight: 'bold' }} />
+              <Bar dataKey="count" name="Total Shipments" fill="#f59e0b" radius={[4, 4, 0, 0]} maxBarSize={50} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </>
   );

@@ -8,6 +8,18 @@ export async function PATCH(request, { params }) {
     const resolvedParams = await params;
     const body = await request.json();
     
+    // If status is changing to DELIVERED, reduce inventory capacity
+    if (body.status === 'DELIVERED') {
+      const oldShipment = await Shipment.findById(resolvedParams.id);
+      if (oldShipment && oldShipment.status !== 'DELIVERED') {
+        const { Inventory } = await import('@/models');
+        await Inventory.findOneAndUpdate(
+          { productId: oldShipment.productId, warehouseId: oldShipment.warehouseId },
+          { $inc: { quantity: -oldShipment.quantity } }
+        );
+      }
+    }
+
     // Update the shipment status
     const shipment = await Shipment.findByIdAndUpdate(resolvedParams.id, { status: body.status }, { new: true });
     

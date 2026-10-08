@@ -12,13 +12,27 @@ export async function GET() {
     const inTransitShipments = await Shipment.countDocuments({ status: 'IN_TRANSIT' });
     const deliveredShipments = await Shipment.countDocuments({ status: 'DELIVERED' });
 
-    const inventoryItems = await Inventory.find({});
+    const inventoryItems = await Inventory.find({}).populate('warehouseId');
     let totalStock = 0;
     let lowStockCount = 0;
+    
+    // Group stock by warehouse
+    const stockByWarehouse = {};
+    
     inventoryItems.forEach(inv => {
       totalStock += inv.quantity;
       if (inv.quantity < 50) lowStockCount++;
+      
+      if (inv.warehouseId) {
+        const whName = inv.warehouseId.name;
+        stockByWarehouse[whName] = (stockByWarehouse[whName] || 0) + inv.quantity;
+      }
     });
+
+    const warehouseChartData = Object.keys(stockByWarehouse).map(name => ({
+      name,
+      stock: stockByWarehouse[name]
+    }));
 
     // Aggregate shipments by their current status
     const shipmentStatuses = await Shipment.aggregate([
@@ -50,7 +64,8 @@ export async function GET() {
           { name: 'In Transit', count: statusCounts.IN_TRANSIT },
           { name: 'Delivered', count: statusCounts.DELIVERED },
           { name: 'Cancelled', count: statusCounts.CANCELLED }
-        ]
+        ],
+        warehouseChartData
       }
     });
   } catch (error) {
