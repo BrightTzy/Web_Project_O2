@@ -38,7 +38,7 @@ As an Admin, you have unrestricted access to oversee the entire logistics networ
 **How to use:** Use this page to manage your physical infrastructure. Admins can register new physical warehouse locations and define the maximum unit capacity each facility can hold.
 
 #### 3.3 Admin Products
-![Admin Products](./screenshots/Admin-Products.png)
+![Admin Products](./screenshots/Admin-Product.png)
 **How to use:** This acts as the master catalog. Use this page to register new types of products your company handles by entering a product name, a unique SKU (Stock Keeping Unit), and a base price.
 
 #### 3.4 Admin Inventory
@@ -46,7 +46,7 @@ As an Admin, you have unrestricted access to oversee the entire logistics networ
 **How to use:** This page manages physical stock. You can assign registered products to specific warehouses and declare how many units are available. The system automatically calculates capacity limits and will prevent you from overfilling a warehouse.
 
 #### 3.5 Admin Customers
-![Admin Customers](./screenshots/Admin-Customers.png)
+![Admin Customers](./screenshots/Admin-Customer.png)
 **How to use:** Use this page to build a client base. You can register new recipient profiles, including their name, email, and exact delivery address.
 
 #### 3.6 Admin Shipment
@@ -61,7 +61,7 @@ As Warehouse Staff, your primary focus is managing the product catalog and physi
 **How to use:** This is your primary dashboard. It provides a specialized chart aggregating the live stock capacity currently sitting inside each warehouse, allowing you to instantly identify which facilities are healthy and which have low stock.
 
 #### 4.2 Warehouse Products
-![Warehouse Products](./screenshots/Warehouse-Products.png)
+![Warehouse Products](./screenshots/Warehouse-Product.png)
 **How to use:** Use this page to register new types of products to the master catalog by entering a product name, SKU, and price.
 
 #### 4.3 Warehouse Inventory
@@ -76,7 +76,7 @@ As Logistics Staff, your responsibility is managing clients and executing outbou
 **How to use:** This dashboard provides a quick overview of shipments that require action (pending), shipments in transit, and those successfully delivered.
 
 #### 5.2 Logistics Customers
-![Logistics Customers](./screenshots/Logistics-Customers.png)
+![Logistics Customers](./screenshots/Logistics-Customer.png)
 **How to use:** Use this page to register new recipient profiles, including their name, email, and exact delivery address.
 
 #### 5.3 Logistics Shipment
