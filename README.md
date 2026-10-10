@@ -2,7 +2,7 @@
 
 ## Team Members
 - [BrightTzy](https://github.com/BrightTzy)
-- [Min Khant Tin](https://github.com/MinKhantTin)
+- [Min Khant Tin](https://github.com/manisandar)
 - [Shin Thant Aung](https://github.com/shinthant-aung)
 
 **Team Repository:** [https://github.com/BrightTzy/Web_Project_O2](https://github.com/BrightTzy/Web_Project_O2)
